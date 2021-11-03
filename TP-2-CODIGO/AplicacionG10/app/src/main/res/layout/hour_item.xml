@@ -4,24 +4,23 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="false">
     <androidx.cardview.widget.CardView
         android:layout_width="350dp"
         android:layout_height="80dp"
-        android:layout_columnWeight="1"
-        android:layout_rowWeight="1"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:cardCornerRadius="8dp"
-        android:clickable="true">
+        >
         <LinearLayout
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="16dp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true">
+            >
             <TextView
                 android:id="@+id/hour_title"
                 android:textAlignment="center"
@@ -30,7 +29,8 @@
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
