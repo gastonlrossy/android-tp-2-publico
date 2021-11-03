@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectDateActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:id="@+id/textGrid"
+                android:text="Selecciona el horario"
+                android:textSize="34sp"
+                android:textColor="@android:color/white"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <GridLayout
+            android:id="@+id/mainGrid"
+            android:columnCount="1"
+            android:rowCount="6"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false"
+            android:layout_weight="8"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            >
+            <ListView
+                android:id="@+id/items_hours"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </GridLayout>
+    </LinearLayout>
+</android.widget.RelativeLayout>

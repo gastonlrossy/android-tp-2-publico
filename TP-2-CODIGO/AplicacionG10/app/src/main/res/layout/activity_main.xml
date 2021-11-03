@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#68573C">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+    <com.andrognito.patternlockview.PatternLockView
+        android:id="@+id/pattern_lock_view"
+        app:normalStateColor="@color/black"
+        app:correctStateColor="@color/blue"
+        app:wrongStateColor="@color/red"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_centerInParent="true"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btnGuardarPatron"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pattern_lock_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Guardar Patron"
+        app:backgroundTint="#090909" />
+
+    <ImageView
+        android:id="@+id/userImage_MainActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:src="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/pattern_lock_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="31dp"
+        android:text="Bienvenido"
+        android:textColor="@color/white"
+        android:textSize="25dp" />
+
+</android.widget.RelativeLayout>

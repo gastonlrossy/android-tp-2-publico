@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SelectDateActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:text="Detalles"
+                android:textSize="34sp"
+                android:textColor="@android:color/white"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <GridLayout
+            android:id="@+id/mainGrid"
+            android:columnCount="1"
+            android:rowCount="1"
+            android:alignmentMode="alignMargins"
+            android:columnOrderPreserved="false"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="20dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="8dp">
+                <LinearLayout
+                    android:layout_gravity=""
+                    android:layout_margin="28dp"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="159dp"
+                        android:id="@+id/overview_image"
+                        android:layout_height="142dp"
+                        android:layout_gravity="center_horizontal"
+                        android:maxWidth="5dp"
+                        android:maxHeight="9dp"
+                        android:scaleType="fitStart"
+                        android:src="@drawable/biblioteca_almafuerte" />
+                    <TextView
+                        android:text="Nombre:"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_width = "match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left" />
+                    <TextView
+                        android:gravity="left"
+                        android:id="@+id/overview_title"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="Días: "
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left" />
+                    <TextView
+                        android:textAlignment="center"
+                        android:id="@+id/overview_days"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal" />
+                    <TextView
+                        android:text="Horarios: "
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal" />
+                    <TextView
+                        android:id="@+id/overview_hoursRange"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal" />
+                    <TextView
+                        android:text="Dirección: "
+                        android:textAlignment="center"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal" />
+                    <TextView
+                        android:id="@+id/overview_address"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+        <Button
+            android:id="@+id/overview_btn_start_booking"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/blue"
+            android:layout_marginBottom="15dp"
+            android:text="Realizar una reserva"
+            android:layout_centerHorizontal="true"/>
+    </LinearLayout>
+</android.widget.RelativeLayout>

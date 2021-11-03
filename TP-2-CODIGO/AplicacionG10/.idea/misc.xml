@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Agustin/AndroidStudioProjects/AplicacionG10/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/Users/Agustin/AndroidStudioProjects/AplicacionG10/app/src/main/res/layout/activity_confirm_pattern.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Agustin/AndroidStudioProjects/AplicacionG10/app/src/main/res/layout/activity_main.xml" value="0.29936594202898553" />
+        <entry key="..\:/Users/Agustin/AndroidStudioProjects/AplicacionG10/app/src/main/res/layout/activity_succesful_pattern.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Agustin/Desktop/Todo/Estudio/Ingenieria en Informatica (201)/Materias en curso/Sistemas Operativos Avanzados/Dev/androidTP2/AplicacionG10/app/src/main/res/layout/activity_confirm_pattern.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Agustin/Desktop/Todo/Estudio/Ingenieria en Informatica (201)/Materias en curso/Sistemas Operativos Avanzados/Dev/androidTP2/AplicacionG10/app/src/main/res/layout/activity_main.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Agustin/Desktop/Todo/Estudio/Ingenieria en Informatica (201)/Materias en curso/Sistemas Operativos Avanzados/Dev/androidTP2/AplicacionG10/app/src/main/res/layout/activity_menu.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Agustin/Desktop/Todo/Estudio/Ingenieria en Informatica (201)/Materias en curso/Sistemas Operativos Avanzados/Dev/androidTP2/AplicacionG10/app/src/main/res/layout/activity_succesful_pattern.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_booking.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_confirm_pattern.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_library_list.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_library_overview.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_main.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_menu.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_select_date.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_select_day.xml" value="0.22" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_succesful_pattern.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_successful_booking.xml" value="0.22" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_successful_pattern.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/activity_summary.xml" value="0.22" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/backup.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/detail_list.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/hour_item.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/item.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/prueba.xml" value="0.16" />
+        <entry key="..\:/Users/Gasto/StudioProjects/android-tp-2/AplicacionG10/app/src/main/res/layout/prueba2.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/activity_confirm_pattern.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/activity_menu.xml" value="0.11503623188405797" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/activity_succesful_pattern.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/detail_list.xml" value="0.209375" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/item.xml" value="0.11503623188405797" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/library_overview.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/select_date.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/successful.xml" value="0.1" />
+        <entry key="..\:/Users/Gasto/StudioProjects/androidTP2/AplicacionG10/app/src/main/res/layout/summary.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

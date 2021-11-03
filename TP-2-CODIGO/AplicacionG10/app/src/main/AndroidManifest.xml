@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.aplicaciong10">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AplicacionG10"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ViewMetricsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".APIConnect_HttpPOST"
+            android:exported="false"
+            android:label="@string/title_activity_apiconnect_http_post"
+            android:theme="@style/Theme.AplicacionG10.NoActionBar"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".LibraryListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".BookingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LibraryOverviewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SuccessfulBookingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SummaryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SelectDateActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SelectDayActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SuccessfulPatternActivity"
+            android:exported="true" />
+        <activity
+            android:name=".confirmPatternActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".APIConnect_HttpPOST"
+            android:enabled="true"
+            android:label="Services Http GET" />
+    </application>
+
+</manifest>
