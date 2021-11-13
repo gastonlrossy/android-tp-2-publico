@@ -24,7 +24,6 @@ public class SelectDateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_date);
         items = (ListView) findViewById(R.id.items_hours);
         fillItems();
-
     }
 
     private void fillItems(){

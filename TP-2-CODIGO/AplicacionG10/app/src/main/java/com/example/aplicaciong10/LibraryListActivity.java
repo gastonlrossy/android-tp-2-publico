@@ -8,18 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
@@ -35,7 +29,7 @@ import java.util.ArrayList;
 
 import io.paperdb.Paper;
 
-public class LibraryListActivity extends AppCompatActivity implements  SensorEventListener {
+public class LibraryListActivity extends AppCompatActivity {
     private ListView items;
     private Adapter adapter;
     private ArrayList<Library> entities = new ArrayList<>();
@@ -45,28 +39,14 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
     /* Variables para interactuar con los sensores */
     private SensorManager mSensorManager;
 
-    private TextView countdownText;
-    private CountDownTimer countDownTimer;
+    public TextView countdownText;
+
     private long timeLeftInMilliseconds = 15000;
 
     private boolean timerRunning = false;
 
-    /* Acelerómetro */
-    private float currentX, currentY, currentZ;
-    private float lastX, lastY, lastZ;
-    private float xDiff, yDiff, zDiff;
-    private final float shakeThreshold = 10f;
-    private boolean isFirstTime = true;
-    private Vibrator vibrator;
-
-
-    //Var. para que al detectar una baja temperatura no siga midiendo
-    private boolean detectedLowTemperature = false;
-    private final int temperatureThreshold = 10;
-    private boolean timerTimeout = false;
-
-    private static final String URI_REGISTER_EVENT = "http://so-unlam.net.ar/api/api/event";
-    private static final String URI_REFRESH_TOKEN = "http://so-unlam.net.ar/api/api/refresh";
+    private final String URI_REFRESH_TOKEN = "http://so-unlam.net.ar/api/api/refresh";
+    private final String URI_REGISTER_EVENT = "http://so-unlam.net.ar/api/api/event";
 
     private final String REGISTER_EVENT_TEMPERATURE = "RegisterEventTemperature";
     private final String REGISTER_EVENT_SHAKE = "RegisterEventShake";
@@ -76,16 +56,16 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
     private boolean isEventShake = false;
 
     private String success;
-    private JSONObject jsonObject;
+    public JSONObject jsonObject;
 
     public IntentFilter shakeIntentFilter;
-    private ReceptorShakeEvent shakeReceiver = new ReceptorShakeEvent();
 
     public IntentFilter refreshIntentFilter;
-    private ReceptorRefreshToken  refreshReceiver = new ReceptorRefreshToken();
 
     public IntentFilter registerEventFilterTemperature;
-    private ReceptorRegisterEventTemperature registerEventReceiverTemperature = new ReceptorRegisterEventTemperature();
+
+    private LibraryListPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +84,17 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
             }
         }
 
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        presenter = new LibraryListPresenter(this);
+
+        presenter.setupSensorManager();
+        presenter.setupShakeEvent();
+        presenter.setupReceptorRegisterEventTemperature();
+        presenter.setupRefreshTokenEvent();
 
         countdownText = (TextView) findViewById(R.id.textCounterMenu);
 
-        updateTimer();
+        presenter.updateTimer();
 
         configurarBroadcastRegisterEventLowTemperature();
 
@@ -170,41 +154,13 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
         items.setAdapter(adapter);
     }
 
-
-    /******************************     Para configurar los sensores  ********************************/
-
-    protected void initializeTemperatureSensor()
-    {
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE), SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    protected void initializeAccelerometerSensor()
-    {
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    protected void stopAccelerometerSensor()
-    {
-        mSensorManager.unregisterListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
-    }
-
-    private void stopTemperatureSensor()
-    {
-        mSensorManager.unregisterListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE));
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
 
         // Aca debería chequear la temperatura del ambiente
-        startStop();
 
-        //Agregar el TIMER
-        if(!detectedLowTemperature && !timerTimeout)
-            initializeTemperatureSensor();
-
-        initializeAccelerometerSensor();
+        presenter.onResume();
 
         // Una vez que detecto una baja temperatura, deberia setear una var en TRUE asi no sigue chequeando
         // Y paramos la ejecución del sensor, asi no gasta tanta bateria
@@ -215,88 +171,7 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
     protected void onStop() {
         super.onStop();
 
-        if(!detectedLowTemperature && !timerTimeout)
-            stopTemperatureSensor();
-
-        stopAccelerometerSensor();
-
-        startStop();
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy)
-    {
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        String txt = "";
-
-        synchronized (this) {
-            Log.d("sensor", event.sensor.getName());
-
-            switch (event.sensor.getType()) {
-                case Sensor.TYPE_AMBIENT_TEMPERATURE:
-                    txt += "Temperatura\n";
-                    txt += event.values[0] + " C \n";
-
-                    if(event.values[0] < temperatureThreshold && !detectedLowTemperature && !timerTimeout) //Si la temperatura es menor a 10°C
-                    {
-                        //Para que ya no siga entrando a detectar
-                        detectedLowTemperature = true;
-
-                        temperaturePopUp();
-
-                        stopTemperatureSensor();
-
-                        //Para Registrar evento de temperatura baja
-                        isEventTemperature = true;
-
-                        registerEventTemperature(jsonObject);
-                    }
-
-                    break;
-
-                case Sensor.TYPE_ACCELEROMETER:
-                    currentX = event.values[0];
-                    currentY = event.values[1];
-                    currentZ = event.values[2];
-
-                    if(!isFirstTime)
-                    {
-                        xDiff = Math.abs(currentX - lastX);
-                        yDiff = Math.abs(currentY - lastY);
-                        zDiff = Math.abs(currentZ - lastZ);
-
-                        if((xDiff > shakeThreshold && yDiff > shakeThreshold) ||
-                                (xDiff > shakeThreshold && zDiff > shakeThreshold) ||
-                                (yDiff > shakeThreshold && zDiff > shakeThreshold))
-                        {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                            } else {
-                                vibrator.vibrate(500);
-                            }
-
-                            isEventShake = true;
-
-                            registerEventShake(jsonObject);
-                        }
-
-                    }
-
-                    lastX = currentX;
-                    lastY = currentY;
-                    lastZ = currentZ;
-                    isFirstTime = false;
-
-                    break;
-
-            }
-        }
-
-
+        presenter.onStop();
     }
 
     void temperaturePopUp()
@@ -316,64 +191,7 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
         alert.show();
     }
 
-    /******************************     Para configurar los sensores  ********************************/
-
-    /************************* Timer Sensor de Temperatura *************************************/
-
-    private void startStop() {
-        if(timerRunning)
-        {
-            stopTimer();
-        } else {
-            startTimer();
-        }
-    }
-
-    private void startTimer(){
-        countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeftInMilliseconds = millisUntilFinished;
-                updateTimer();
-            }
-
-            @Override
-            public void onFinish() {
-                timerTimeout = true;
-            }
-        }.start();
-
-        timerRunning = true;
-    }
-
-    private void updateTimer(){
-        int minutes = (int) timeLeftInMilliseconds / 60000;
-        int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
-
-        String timeLeftText;
-
-        timeLeftText = "" + minutes;
-        timeLeftText += ":";
-
-        if(seconds < 10) timeLeftText += "0";
-        timeLeftText += seconds;
-
-        countdownText.setText(timeLeftText);
-    }
-
-    private void stopTimer(){
-        countDownTimer.cancel();
-        timerRunning = false;
-    }
-
-
-    /************************* Timer Sensor de Temperatura *************************+***********/
-
-
-    /************************** Evento de Registro de Temperatura *************************/
-
-
-    private void registerEventShake(JSONObject loginRegisterJson)
+    public void registerEventShake()
     {
         if (!isConnected(LibraryListActivity.this)) {
             showCustomDialog();
@@ -391,7 +209,7 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
             i.putExtra("uri", URI_REGISTER_EVENT);
             i.putExtra("datosJson", obj.toString());
             i.putExtra("sendMode", REGISTER_EVENT_SHAKE);
-            i.putExtra("loginRegisterJson", loginRegisterJson.toString());
+            i.putExtra("loginRegisterJson", this.jsonObject.toString());
 
             startService(i);
 
@@ -401,7 +219,7 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
     }
 
 
-    private void registerEventTemperature(JSONObject loginRegisterJson)
+    public void registerEventTemperature()
     {
         if (!isConnected(LibraryListActivity.this)) {
             showCustomDialog();
@@ -419,7 +237,7 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
             i.putExtra("uri", URI_REGISTER_EVENT);
             i.putExtra("datosJson", obj.toString());
             i.putExtra("sendMode", REGISTER_EVENT_TEMPERATURE);
-            i.putExtra("loginRegisterJson", loginRegisterJson.toString());
+            i.putExtra("loginRegisterJson", this.jsonObject.toString());
 
             startService(i);
 
@@ -428,93 +246,11 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
         }
     }
 
-
-    public class ReceptorRegisterEventTemperature extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent) {
-
-            try {
-                String datosJsonString = intent.getStringExtra("datosJson");
-                JSONObject datosJson = new JSONObject(datosJsonString);
-
-                Log.i("LOGUEO MAIN", "Datos Json Main Thread: " + datosJsonString);
-
-                success = datosJson.get("success").toString();
-                if(success.equals("true")){
-                    Toast.makeText(LibraryListActivity.this, "Se ha registrado el evento de temperatura baja satisfactoriamente!", Toast.LENGTH_SHORT).show();
-                }
-
-                else if(success.equals("false")){
-                    if(datosJson.get("msg").toString().equals("Tiempo de sesión expirado."))
-                    {
-                        Toast.makeText(LibraryListActivity.this, "Tiempo de sesión expirado, se actualizará el token. ", Toast.LENGTH_SHORT).show();
-                        //Aca tenemos que realizar un PUT y luego volver a registrar el evento
-
-                        JSONObject obj = new JSONObject();
-
-                        obj.put("empty", "empty");
-
-                        Intent i = new Intent(LibraryListActivity.this, APIConnect_HttpPOST.class);
-
-                        i.putExtra("uri", URI_REFRESH_TOKEN);
-                        i.putExtra("datosJson", obj.toString());
-                        i.putExtra("sendMode", REFRESH_TOKEN);
-                        i.putExtra("loginRegisterJson", jsonObject.toString());
-
-                        startService(i);
-
-                    } else
-                        Toast.makeText(LibraryListActivity.this, "Hubo un error en registrar el evento de temperatura baja. (" + datosJson.get("msg").toString() + ")", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch(JSONException e){
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-
-
-    public class ReceptorRefreshToken extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent) {
-
-            try {
-                String datosJsonString = intent.getStringExtra("datosJson");
-                JSONObject datosJson = new JSONObject(datosJsonString);
-
-                Log.i("LOGUEO MAIN", "Se tratará de actualizar el token...");
-
-                success = datosJson.get("success").toString();
-                if(success.equals("true")){
-                    Toast.makeText(LibraryListActivity.this, "Se ha actualizado el token satisfactoriamente!", Toast.LENGTH_SHORT).show();
-                    jsonObject = datosJson;
-
-                    if(isEventTemperature)
-                        registerEventTemperature(jsonObject);
-                    else if(isEventShake)
-                        registerEventShake(jsonObject);
-                }
-
-                else if(success.equals("false")){
-                    Toast.makeText(LibraryListActivity.this, "Hubo un error en actualizar el token. (" + datosJson.get("msg").toString() + ")", Toast.LENGTH_SHORT).show();
-                }
-
-                isEventTemperature = false;
-                isEventShake = false;
-
-            } catch(JSONException e){
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-
     private void configurarBroadcastRegisterEventLowTemperature()
     {
         registerEventFilterTemperature = new IntentFilter("com.example.intentservice.intent.action.REGISTER_EVENT_LOW_TEMPERATURE");
         registerEventFilterTemperature.addCategory(Intent.CATEGORY_DEFAULT);
-        registerReceiver(registerEventReceiverTemperature, registerEventFilterTemperature);
+        registerReceiver(this.presenter.registerEventReceiverTemperature, registerEventFilterTemperature);
     }
 
 
@@ -522,67 +258,15 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
     {
         refreshIntentFilter = new IntentFilter("com.example.intentservice.intent.action.REFRESH_TOKEN");
         refreshIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        registerReceiver(refreshReceiver, refreshIntentFilter);
+        registerReceiver(this.presenter.refreshReceiver, refreshIntentFilter);
     }
-
-
-    public class ReceptorShakeEvent extends BroadcastReceiver {
-        public void onReceive(Context context, Intent intent) {
-
-            try {
-                String datosJsonString = intent.getStringExtra("datosJson");
-                JSONObject datosJson = new JSONObject(datosJsonString);
-
-                Log.i("LOGUEO MAIN", "Registrando shake event...");
-
-                success = datosJson.get("success").toString();
-                if(success.equals("true"))
-                    Toast.makeText(LibraryListActivity.this, "Se ha registrado el evento de shake satisfactoriamente!", Toast.LENGTH_SHORT).show();
-
-
-                else if(success.equals("false")){
-                    if(datosJson.get("msg").toString().equals("Tiempo de sesión expirado."))
-                    {
-                        Toast.makeText(LibraryListActivity.this, "Tiempo de sesión expirado, se actualizará el token. ", Toast.LENGTH_SHORT).show();
-                        //Aca tenemos que realizar un PUT y luego volver a registrar el evento
-
-                        JSONObject obj = new JSONObject();
-
-                        obj.put("empty", "empty");
-
-                        Intent i = new Intent(LibraryListActivity.this, APIConnect_HttpPOST.class);
-
-                        i.putExtra("uri", URI_REFRESH_TOKEN);
-                        i.putExtra("datosJson", obj.toString());
-                        i.putExtra("sendMode", REFRESH_TOKEN);
-                        i.putExtra("loginRegisterJson", jsonObject.toString());
-
-                        startService(i);
-
-                    } else
-                        Toast.makeText(LibraryListActivity.this, "Hubo un error en registrar el evento de shake. (" + datosJson.get("msg").toString() + ")", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch(JSONException e){
-                e.printStackTrace();
-            }
-
-        }
-    }
-
 
     private void configurarBroadcastReceiverShake()
     {
         shakeIntentFilter = new IntentFilter("com.example.intentservice.intent.action.REGISTER_EVENT_SHAKE");
         shakeIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
-        registerReceiver(shakeReceiver, shakeIntentFilter);
+        registerReceiver(this.presenter.shakeReceiver, shakeIntentFilter);
     }
-
-    /******************************   Para realizar el POST a la API  ********************************/
-
-
-    /**************     Para chequear el estado de la conexión a internet **********************/
-
 
     private void showCustomDialog() {
 
@@ -619,8 +303,4 @@ public class LibraryListActivity extends AppCompatActivity implements  SensorEve
         }
 
     }
-
-    /**************     Para chequear el estado de la conexión a internet **********************/
-
-
 }
